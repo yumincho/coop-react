@@ -2,6 +2,8 @@ import { Circle, CircleOutlined } from '@mui/icons-material'
 import { IconButton, TextField } from '@mui/material'
 import { useState } from 'react'
 
+import DueDate from './DueDate'
+
 const Todo = () => {
   const [content, setContent] = useState('')
   const [done, setDone] = useState(false)
@@ -19,12 +21,16 @@ const Todo = () => {
           <CircleOutlined onClick={() => setDone(true)} />
         )}
       </IconButton>
-      <TextField
-        disabled={done}
-        variant="standard"
-        value={content}
-        onChange={handleTyping}
-      />
+      <span>
+        <TextField
+          autoFocus
+          disabled={done}
+          variant="standard"
+          value={content}
+          onChange={handleTyping}
+        />
+        <DueDate disabled={done} />
+      </span>
     </div>
   )
 }
