@@ -4,32 +4,51 @@ import { useState } from 'react'
 
 import DueDate from './DueDate'
 
-const Todo = () => {
+interface TodoProps {
+  idx: number
+  completed: boolean
+  toggleTodoCompleted: (index: number) => void
+}
+
+const Todo = ({ idx, completed, toggleTodoCompleted }: TodoProps) => {
   const [content, setContent] = useState('')
-  const [done, setDone] = useState(false)
+  const [tempCompleted, setTempCompleted] = useState(completed)
+  const [timerId, setTimerId] = useState<number | null>(null)
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value)
   }
 
+  const handleDone = () => {
+    const id = setTimeout(() => toggleTodoCompleted(idx), 1000)
+
+    setTempCompleted(true)
+    setTimerId(id)
+  }
+
+  const handleRollback = () => {
+    setTempCompleted(false)
+    clearTimeout(timerId!)
+  }
+
   return (
     <div>
       <IconButton>
-        {done ? (
-          <Circle onClick={() => setDone(false)} />
+        {tempCompleted ? (
+          <Circle onClick={handleRollback} />
         ) : (
-          <CircleOutlined onClick={() => setDone(true)} />
+          <CircleOutlined onClick={handleDone} />
         )}
       </IconButton>
       <span>
         <TextField
           autoFocus
-          disabled={done}
+          disabled={tempCompleted}
           variant="standard"
           value={content}
           onChange={handleTyping}
         />
-        <DueDate disabled={done} />
+        <DueDate disabled={tempCompleted} />
       </span>
     </div>
   )
