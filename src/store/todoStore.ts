@@ -1,19 +1,19 @@
 import { create } from 'zustand'
 
-export interface TodoProps {
+export interface Todo {
   idx: number
   completed: boolean
   content: string
 }
 
 export interface TodoStore {
-  todos: TodoProps[]
+  todos: Todo[]
   addTodo: () => void
   toggleTodo: (idx: number, completed?: boolean) => void
   setTodoContent: (idx: number, content: string) => void
-  getTodo: (idx: number) => TodoProps
-  getScheduledTodos: () => TodoProps[]
-  getCompletedTodos: () => TodoProps[]
+  getTodo: (idx: number) => Todo
+  getScheduledTodos: () => Todo[]
+  getCompletedTodos: () => Todo[]
 }
 
 export const useTodoStore = create<TodoStore>((set, get) => ({

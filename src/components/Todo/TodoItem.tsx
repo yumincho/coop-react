@@ -11,7 +11,7 @@ const wrapper = css({
   alignItems: 'center',
 })
 
-const Todo = ({ idx }: { idx: number }) => {
+const TodoItem = ({ idx }: { idx: number }) => {
   const { toggleTodo, getTodo, setTodoContent } = useTodoStore()
 
   const todo = getTodo(idx)
@@ -52,4 +52,4 @@ const Todo = ({ idx }: { idx: number }) => {
   )
 }
 
-export default Todo
+export default TodoItem
