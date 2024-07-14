@@ -22,7 +22,6 @@ const DueDate = ({ disabled }: DueDateProps) => {
       className={style}
       disabled={disabled}
       type="date"
-      defaultValue={getISOString(dueDate)}
       value={getISOString(dueDate)}
       onChange={(e) => setDueDate(new Date(e.target.value))}
     />
