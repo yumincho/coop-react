@@ -49,7 +49,7 @@ const TodoList = ({ title, todos, editable = false }: TodoList) => {
         )}
       </div>
       {todos.map((todo) => (
-        <TodoItem key={todo.idx} idx={todo.idx} />
+        <TodoItem key={todo.id} id={todo.id} />
       ))}
     </div>
   )

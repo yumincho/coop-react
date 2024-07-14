@@ -18,32 +18,32 @@ const style = {
   }),
 }
 
-const TodoItem = ({ idx }: { idx: number }) => {
+const TodoItem = ({ id }: { id: number }) => {
   const { toggleTodo, getTodo, setTodoContent, deleteTodo } = useTodoStore()
 
-  const todo = getTodo(idx)
+  const todo = getTodo(id)
   const [tempCompleted, setTempCompleted] = useState(todo.completed)
   const [timerId, setTimerId] = useState<number | null>(null)
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodoContent(idx, e.target.value)
+    setTodoContent(id, e.target.value)
   }
 
   const handleDone = () => {
-    const id = setTimeout(() => toggleTodo(idx, true), 1000)
+    const id = setTimeout(() => toggleTodo(todo.id, true), 1000)
     setTempCompleted(true)
     setTimerId(id)
   }
 
   const handleRollback = () => {
-    toggleTodo(idx, false)
+    toggleTodo(id, false)
     setTempCompleted(false)
     clearTimeout(timerId!)
   }
 
   const handleBlur = () => {
     if (todo.content === '') {
-      deleteTodo(idx)
+      deleteTodo(id)
     }
   }
 
@@ -66,7 +66,7 @@ const TodoItem = ({ idx }: { idx: number }) => {
         onBlur={handleBlur}
         fullWidth
       />
-      <DueDate idx={idx} disabled={tempCompleted} />
+      <DueDate idx={id} disabled={tempCompleted} />
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 export interface Todo {
-  idx: number
+  id: number
   completed: boolean
   content: string
   due: Date
@@ -10,12 +10,13 @@ export interface Todo {
 
 export interface TodoStore {
   todos: Todo[]
+  nextId: number
   addTodo: () => void
-  deleteTodo: (idx: number) => void
-  toggleTodo: (idx: number, completed?: boolean) => void
-  setTodoContent: (idx: number, content: string) => void
-  setTodoDue: (idx: number, due: Date) => void
-  getTodo: (idx: number) => Todo
+  deleteTodo: (id: number) => void
+  toggleTodo: (id: number, completed?: boolean) => void
+  setTodoContent: (id: number, content: string) => void
+  setTodoDue: (id: number, due: Date) => void
+  getTodo: (id: number) => Todo
   getScheduledTodos: () => Todo[]
   getCompletedTodos: () => Todo[]
 }
@@ -24,43 +25,45 @@ export const useTodoStore = create(
   persist<TodoStore>(
     (set, get) => ({
       todos: [],
+      nextId: 0,
       addTodo: () =>
         set((state) => ({
           todos: [
             ...state.todos,
             {
-              idx: state.todos.length,
+              id: state.nextId,
               completed: false,
               content: '',
               due: new Date(),
             },
           ],
+          nextId: state.nextId + 1,
         })),
-      deleteTodo: (idx) =>
+      deleteTodo: (id) =>
         set((state) => {
           const newTodos = [...state.todos]
-          newTodos.splice(idx, 1)
-          return { todos: newTodos }
+          return { todos: newTodos.filter((todo) => todo.id !== id) }
         }),
-      toggleTodo: (idx, completed) =>
+      toggleTodo: (id, completed) =>
         set((state) => {
           const newTodos = [...state.todos]
-          newTodos[idx].completed = completed ?? !newTodos[idx].completed
+          newTodos.filter((todo) => todo.id === id)[0].completed =
+            completed ?? !newTodos.filter((todo) => todo.id === id)[0].completed
           return { todos: newTodos }
         }),
-      setTodoContent: (idx, content) =>
+      setTodoContent: (id, content) =>
         set((state) => {
           const newTodos = [...state.todos]
-          newTodos[idx].content = content
+          newTodos.filter((todo) => todo.id === id)[0].content = content
           return { todos: newTodos }
         }),
-      setTodoDue: (idx, date) =>
+      setTodoDue: (id, date) =>
         set((state) => {
           const newTodos = [...state.todos]
-          newTodos[idx].due = date
+          newTodos.filter((todo) => todo.id === id)[0].due = date
           return { todos: newTodos }
         }),
-      getTodo: (idx) => get().todos[idx],
+      getTodo: (id) => get().todos.filter((todo) => todo.id === id)[0],
       getScheduledTodos: () => get().todos.filter((todo) => !todo.completed),
       getCompletedTodos: () => get().todos.filter((todo) => todo.completed),
     }),
