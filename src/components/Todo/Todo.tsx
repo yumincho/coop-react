@@ -35,12 +35,8 @@ const Todo = ({ idx }: { idx: number }) => {
 
   return (
     <div className={wrapper}>
-      <IconButton>
-        {tempCompleted ? (
-          <Circle onClick={handleRollback} />
-        ) : (
-          <CircleOutlined onClick={handleDone} />
-        )}
+      <IconButton onClick={tempCompleted ? handleRollback : handleDone}>
+        {tempCompleted ? <Circle /> : <CircleOutlined />}
       </IconButton>
       <TextField
         autoFocus
