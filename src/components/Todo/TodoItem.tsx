@@ -1,15 +1,22 @@
 import { css } from '@emotion/css'
-import { Circle, CircleOutlined } from '@mui/icons-material'
+import { RadioButtonChecked, RadioButtonUnchecked } from '@mui/icons-material'
 import { IconButton, TextField } from '@mui/material'
 import { useState } from 'react'
 
 import { useTodoStore } from '../../store/todoStore'
+import { colors } from '../../styles/color'
 import DueDate from './DueDate'
 
-const wrapper = css({
-  display: 'flex',
-  alignItems: 'center',
-})
+const style = {
+  wrapper: css({
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+  }),
+  checkedButton: css({
+    color: colors.primary.main,
+  }),
+}
 
 const TodoItem = ({ idx }: { idx: number }) => {
   const { toggleTodo, getTodo, setTodoContent } = useTodoStore()
@@ -35,9 +42,13 @@ const TodoItem = ({ idx }: { idx: number }) => {
   }
 
   return (
-    <div className={wrapper}>
+    <div className={style.wrapper}>
       <IconButton onClick={tempCompleted ? handleRollback : handleDone}>
-        {tempCompleted ? <Circle /> : <CircleOutlined />}
+        {tempCompleted ? (
+          <RadioButtonChecked className={style.checkedButton} />
+        ) : (
+          <RadioButtonUnchecked />
+        )}
       </IconButton>
       <TextField
         autoFocus

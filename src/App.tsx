@@ -8,10 +8,16 @@ function App() {
   return (
     <>
       <Header />
-      scheduled
-      <TodoList todos={getScheduledTodos()} />
-      completed
-      <TodoList todos={getCompletedTodos()} />
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1rem',
+        }}
+      >
+        <TodoList title="Scheduled" todos={getScheduledTodos()} editable />
+        <TodoList title="Completed" todos={getCompletedTodos()} />
+      </div>
     </>
   )
 }
