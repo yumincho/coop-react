@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 export interface Todo {
   idx: number
@@ -9,6 +10,7 @@ export interface Todo {
 export interface TodoStore {
   todos: Todo[]
   addTodo: () => void
+  deleteTodo: (idx: number) => void
   toggleTodo: (idx: number, completed?: boolean) => void
   setTodoContent: (idx: number, content: string) => void
   getTodo: (idx: number) => Todo
@@ -16,33 +18,46 @@ export interface TodoStore {
   getCompletedTodos: () => Todo[]
 }
 
-export const useTodoStore = create<TodoStore>((set, get) => ({
-  todos: [],
-  addTodo: () =>
-    set((state) => ({
-      todos: [
-        ...state.todos,
-        {
-          idx: state.todos.length,
-          completed: false,
-          content: `New Todo ${state.todos.length + 1}`,
-        },
-      ],
-    })),
-  toggleTodo: (idx, completed) =>
-    set((state) => {
-      const newTodos = [...state.todos]
-      newTodos[idx].completed = completed ?? !newTodos[idx].completed
-      return { todos: newTodos }
+export const useTodoStore = create(
+  persist<TodoStore>(
+    (set, get) => ({
+      todos: [],
+      addTodo: () =>
+        set((state) => ({
+          todos: [
+            ...state.todos,
+            {
+              idx: state.todos.length,
+              completed: false,
+              content: '',
+            },
+          ],
+        })),
+      deleteTodo: (idx) =>
+        set((state) => {
+          const newTodos = [...state.todos]
+          newTodos.splice(idx, 1)
+          return { todos: newTodos }
+        }),
+      toggleTodo: (idx, completed) =>
+        set((state) => {
+          const newTodos = [...state.todos]
+          newTodos[idx].completed = completed ?? !newTodos[idx].completed
+          return { todos: newTodos }
+        }),
+      setTodoContent: (idx, content) =>
+        set((state) => {
+          const newTodos = [...state.todos]
+          newTodos[idx].content = content
+          return { todos: newTodos }
+        }),
+      getTodo: (idx) => get().todos[idx],
+      getScheduledTodos: () => get().todos.filter((todo) => !todo.completed),
+      getCompletedTodos: () => get().todos.filter((todo) => todo.completed),
     }),
-
-  setTodoContent: (idx, content) =>
-    set((state) => {
-      const newTodos = [...state.todos]
-      newTodos[idx].content = content
-      return { todos: newTodos }
-    }),
-  getTodo: (idx) => get().todos[idx],
-  getScheduledTodos: () => get().todos.filter((todo) => !todo.completed),
-  getCompletedTodos: () => get().todos.filter((todo) => todo.completed),
-}))
+    {
+      name: 'todo-storage',
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+)
