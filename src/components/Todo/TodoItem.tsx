@@ -19,7 +19,7 @@ const style = {
 }
 
 const TodoItem = ({ idx }: { idx: number }) => {
-  const { toggleTodo, getTodo, setTodoContent } = useTodoStore()
+  const { toggleTodo, getTodo, setTodoContent, deleteTodo } = useTodoStore()
 
   const todo = getTodo(idx)
   const [tempCompleted, setTempCompleted] = useState(todo.completed)
@@ -41,6 +41,12 @@ const TodoItem = ({ idx }: { idx: number }) => {
     clearTimeout(timerId!)
   }
 
+  const handleBlur = () => {
+    if (todo.content === '') {
+      deleteTodo(idx)
+    }
+  }
+
   return (
     <div className={style.wrapper}>
       <IconButton onClick={tempCompleted ? handleRollback : handleDone}>
@@ -56,6 +62,8 @@ const TodoItem = ({ idx }: { idx: number }) => {
         variant="standard"
         value={todo.content}
         onChange={handleTyping}
+        placeholder="New Todo"
+        onBlur={handleBlur}
         fullWidth
       />
       <DueDate disabled={tempCompleted} />
