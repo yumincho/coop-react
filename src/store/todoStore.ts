@@ -69,7 +69,7 @@ export const useTodoStore = create(
     }),
     {
       name: 'todo-storage',
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 )
