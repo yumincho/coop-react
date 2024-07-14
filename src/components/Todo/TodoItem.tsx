@@ -66,7 +66,7 @@ const TodoItem = ({ idx }: { idx: number }) => {
         onBlur={handleBlur}
         fullWidth
       />
-      <DueDate disabled={tempCompleted} />
+      <DueDate idx={idx} disabled={tempCompleted} />
     </div>
   )
 }

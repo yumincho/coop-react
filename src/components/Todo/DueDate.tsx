@@ -1,9 +1,11 @@
 import { css } from '@emotion/css'
-import { useState } from 'react'
+
+import { useTodoStore } from '../../store/todoStore'
 
 const getISOString = (date: Date) => date.toISOString().split('T')[0]
 
 interface DueDateProps {
+  idx: number
   disabled?: boolean
 }
 
@@ -13,17 +15,19 @@ const style = css({
   marginLeft: '0.5rem',
 })
 
-const DueDate = ({ disabled }: DueDateProps) => {
-  const today = new Date()
-  const [dueDate, setDueDate] = useState<Date>(today)
+const DueDate = ({ idx, disabled }: DueDateProps) => {
+  const { getTodo, setTodoDue } = useTodoStore()
+
+  // Date type is stored as string in localStorage
+  const due = new Date(getTodo(idx).due)
 
   return (
     <input
       className={style}
       disabled={disabled}
       type="date"
-      value={getISOString(dueDate)}
-      onChange={(e) => setDueDate(new Date(e.target.value))}
+      value={due ? getISOString(due) : ''}
+      onChange={(e) => setTodoDue(idx, new Date(e.target.value))}
     />
   )
 }
