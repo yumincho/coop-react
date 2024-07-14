@@ -1,16 +1,16 @@
 import { css } from '@emotion/css'
 
-import { useTodoStore } from '../../store/todoStore'
+import { TodoProps } from '../../store/todoStore'
 import { colors } from '../../styles/color'
 import Todo from '../Todo/Todo'
 
-const TodoList = () => {
-  const { todos, hasScheduledTodos } = useTodoStore()
-
+const TodoList = ({ todos }: { todos: TodoProps[] }) => {
   return (
     <div>
-      {todos.map(({ completed }, i) => !completed && <Todo key={i} idx={i} />)}
-      {!hasScheduledTodos() && (
+      {todos.map((todo) => (
+        <Todo key={todo.idx} idx={todo.idx} />
+      ))}
+      {todos.length === 0 && (
         <p className={css({ color: colors.neutral.dark })}>No To-do Yet! 🧑‍💻</p>
       )}
     </div>

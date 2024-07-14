@@ -12,23 +12,24 @@ const wrapper = css({
 })
 
 const Todo = ({ idx }: { idx: number }) => {
-  const { toggleTodo, getTodoState } = useTodoStore()
+  const { toggleTodo, getTodo, setTodoContent } = useTodoStore()
 
-  const [content, setContent] = useState('')
-  const [tempCompleted, setTempCompleted] = useState(getTodoState(idx))
+  const todo = getTodo(idx)
+  const [tempCompleted, setTempCompleted] = useState(todo.completed)
   const [timerId, setTimerId] = useState<number | null>(null)
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContent(e.target.value)
+    setTodoContent(idx, e.target.value)
   }
 
   const handleDone = () => {
-    const id = setTimeout(() => toggleTodo(idx), 1000)
+    const id = setTimeout(() => toggleTodo(idx, true), 1000)
     setTempCompleted(true)
     setTimerId(id)
   }
 
   const handleRollback = () => {
+    toggleTodo(idx, false)
     setTempCompleted(false)
     clearTimeout(timerId!)
   }
@@ -42,7 +43,7 @@ const Todo = ({ idx }: { idx: number }) => {
         autoFocus
         disabled={tempCompleted}
         variant="standard"
-        value={content}
+        value={todo.content}
         onChange={handleTyping}
         fullWidth
       />
