@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { Circle, CircleOutlined } from '@mui/icons-material'
 import { IconButton, TextField } from '@mui/material'
 import { useState } from 'react'
@@ -9,6 +10,11 @@ interface TodoProps {
   completed: boolean
   toggleTodoCompleted: (index: number) => void
 }
+
+const wrapper = css({
+  display: 'flex',
+  alignItems: 'center',
+})
 
 const Todo = ({ idx, completed, toggleTodoCompleted }: TodoProps) => {
   const [content, setContent] = useState('')
@@ -32,7 +38,7 @@ const Todo = ({ idx, completed, toggleTodoCompleted }: TodoProps) => {
   }
 
   return (
-    <div>
+    <div className={wrapper}>
       <IconButton>
         {tempCompleted ? (
           <Circle onClick={handleRollback} />
@@ -40,16 +46,15 @@ const Todo = ({ idx, completed, toggleTodoCompleted }: TodoProps) => {
           <CircleOutlined onClick={handleDone} />
         )}
       </IconButton>
-      <span>
-        <TextField
-          autoFocus
-          disabled={tempCompleted}
-          variant="standard"
-          value={content}
-          onChange={handleTyping}
-        />
-        <DueDate disabled={tempCompleted} />
-      </span>
+      <TextField
+        autoFocus
+        disabled={tempCompleted}
+        variant="standard"
+        value={content}
+        onChange={handleTyping}
+        fullWidth
+      />
+      <DueDate disabled={tempCompleted} />
     </div>
   )
 }
