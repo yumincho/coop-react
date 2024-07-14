@@ -3,22 +3,19 @@ import { Circle, CircleOutlined } from '@mui/icons-material'
 import { IconButton, TextField } from '@mui/material'
 import { useState } from 'react'
 
+import { useTodoStore } from '../../store/todoStore'
 import DueDate from './DueDate'
-
-interface TodoProps {
-  idx: number
-  completed: boolean
-  toggleTodoCompleted: (index: number) => void
-}
 
 const wrapper = css({
   display: 'flex',
   alignItems: 'center',
 })
 
-const Todo = ({ idx, completed, toggleTodoCompleted }: TodoProps) => {
+const Todo = ({ idx }: { idx: number }) => {
+  const { toggleTodo, getTodoState } = useTodoStore()
+
   const [content, setContent] = useState('')
-  const [tempCompleted, setTempCompleted] = useState(completed)
+  const [tempCompleted, setTempCompleted] = useState(getTodoState(idx))
   const [timerId, setTimerId] = useState<number | null>(null)
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,8 +23,7 @@ const Todo = ({ idx, completed, toggleTodoCompleted }: TodoProps) => {
   }
 
   const handleDone = () => {
-    const id = setTimeout(() => toggleTodoCompleted(idx), 1000)
-
+    const id = setTimeout(() => toggleTodo(idx), 1000)
     setTempCompleted(true)
     setTimerId(id)
   }
