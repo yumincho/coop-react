@@ -18,7 +18,7 @@ const style = {
   }),
 }
 
-const TodoItem = ({ id }: { id: number }) => {
+const TodoItem = ({ id }: { id: string }) => {
   const { toggleTodo, getTodo, setTodoContent, deleteTodo } = useTodoStore()
 
   const todo = getTodo(id)
@@ -66,7 +66,7 @@ const TodoItem = ({ id }: { id: number }) => {
         onBlur={handleBlur}
         fullWidth
       />
-      <DueDate idx={id} disabled={tempCompleted} />
+      <DueDate id={id} disabled={tempCompleted} />
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { useTodoStore } from '../../store/todoStore'
 const getISOString = (date: Date) => date.toISOString().split('T')[0]
 
 interface DueDateProps {
-  idx: number
+  id: string
   disabled?: boolean
 }
 
@@ -15,11 +15,11 @@ const style = css({
   marginLeft: '0.5rem',
 })
 
-const DueDate = ({ idx, disabled }: DueDateProps) => {
+const DueDate = ({ id, disabled }: DueDateProps) => {
   const { getTodo, setTodoDue } = useTodoStore()
 
   // Date type is stored as string in localStorage
-  const due = new Date(getTodo(idx).due)
+  const due = getTodo(id).due
 
   return (
     <input
@@ -27,7 +27,7 @@ const DueDate = ({ idx, disabled }: DueDateProps) => {
       disabled={disabled}
       type="date"
       value={due ? getISOString(due) : ''}
-      onChange={(e) => setTodoDue(idx, new Date(e.target.value))}
+      onChange={(e) => setTodoDue(id, new Date(e.target.value))}
     />
   )
 }
