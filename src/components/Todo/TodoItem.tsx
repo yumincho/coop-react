@@ -3,7 +3,7 @@ import { RadioButtonChecked, RadioButtonUnchecked } from '@mui/icons-material'
 import { IconButton, TextField } from '@mui/material'
 import { useState } from 'react'
 
-import { useTodoStore } from '../../store/todoStore'
+import { useTodo } from '../../lib/useTodo'
 import { colors } from '../../styles/color'
 import DueDate from './DueDate'
 
@@ -19,24 +19,25 @@ const style = {
 }
 
 const TodoItem = ({ id }: { id: string }) => {
-  const { toggleTodo, getTodo, setTodoContent, deleteTodo } = useTodoStore()
+  const { getTodo, updateTodoContent, updateTodoCompleted, deleteTodo } =
+    useTodo()
 
   const todo = getTodo(id)
   const [tempCompleted, setTempCompleted] = useState(todo.completed)
   const [timerId, setTimerId] = useState<number | null>(null)
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodoContent(id, e.target.value)
+    updateTodoContent(id, e.target.value)
   }
 
   const handleDone = () => {
-    const id = setTimeout(() => toggleTodo(todo.id, true), 1000)
+    const id = setTimeout(() => updateTodoCompleted(todo.id, true), 1000)
     setTempCompleted(true)
     setTimerId(id)
   }
 
   const handleRollback = () => {
-    toggleTodo(id, false)
+    updateTodoCompleted(id, false)
     setTempCompleted(false)
     clearTimeout(timerId!)
   }

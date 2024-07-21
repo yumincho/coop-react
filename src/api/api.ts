@@ -6,7 +6,7 @@ const pb = new Pocketbase(import.meta.env.VITE_API_BASE)
 
 const TODOS = 'todos'
 
-export const createTodo = async () => {
+export const createTodoAPI = async () => {
   try {
     const res = await pb.collection(TODOS).create({
       completed: false,
@@ -32,7 +32,7 @@ export const createTodo = async () => {
   }
 }
 
-export const retrieveTodos = async () => {
+export const fetchTodoListAPI = async () => {
   try {
     const res = await pb.collection(TODOS).getFullList<Todo>()
     return {
@@ -53,7 +53,7 @@ export const retrieveTodos = async () => {
   }
 }
 
-export const updateTodo = async (id: string, todo: Todo) => {
+export const updateTodoAPI = async (id: string, todo: Todo) => {
   try {
     // Check if the date is valid
     if (!todo.due || isNaN(todo.due.getTime())) {
@@ -77,7 +77,7 @@ export const updateTodo = async (id: string, todo: Todo) => {
   }
 }
 
-export const deleteTodo = async (id: string) => {
+export const deleteTodoAPI = async (id: string) => {
   try {
     await pb.collection(TODOS).delete(id)
     return {

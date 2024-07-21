@@ -1,6 +1,6 @@
 import { css } from '@emotion/css'
 
-import { useTodoStore } from '../../store/todoStore'
+import { useTodo } from '../../lib/useTodo'
 
 const getISOString = (date: Date) => date.toISOString().split('T')[0]
 
@@ -16,7 +16,7 @@ const style = css({
 })
 
 const DueDate = ({ id, disabled }: DueDateProps) => {
-  const { getTodo, setTodoDue } = useTodoStore()
+  const { getTodo, updateTodoDue } = useTodo()
 
   // Date type is stored as string in localStorage
   const due = getTodo(id).due
@@ -27,7 +27,7 @@ const DueDate = ({ id, disabled }: DueDateProps) => {
       disabled={disabled}
       type="date"
       value={due ? getISOString(due) : ''}
-      onChange={(e) => setTodoDue(id, new Date(e.target.value))}
+      onChange={(e) => updateTodoDue(id, new Date(e.target.value))}
     />
   )
 }

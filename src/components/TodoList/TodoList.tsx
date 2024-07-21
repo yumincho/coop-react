@@ -3,8 +3,8 @@ import { Add } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { useEffect } from 'react'
 
-import { readTodos } from '../../api/api'
-import { Todo, useTodoStore } from '../../store/todoStore'
+import { useTodo } from '../../lib/useTodo'
+import { Todo } from '../../store/todoStore'
 import { colors } from '../../styles/color'
 import TodoItem from '../Todo/TodoItem'
 
@@ -36,24 +36,24 @@ const style = {
 }
 
 const TodoList = ({ title, todos, editable = false }: TodoList) => {
-  const { addTodo, setTodoList } = useTodoStore()
+  const { createTodo, fetchTodoList } = useTodo()
 
   useEffect(() => {
-    async function fetchTodos() {
-      const res = await readTodos()
-      if (res.type === 'success' && res.data) {
-        setTodoList(res.data)
-      }
+    async function fetch() {
+      fetchTodoList()
     }
-    fetchTodos()
-  }, [setTodoList])
+    fetch()
+  }, [])
 
   return (
     <div className={style.wrapper}>
       <div className={style.header}>
         <h3>{title}</h3>
         {editable && (
-          <IconButton style={{ color: colors.primary.main }} onClick={addTodo}>
+          <IconButton
+            style={{ color: colors.primary.main }}
+            onClick={createTodo}
+          >
             <Add />
           </IconButton>
         )}
