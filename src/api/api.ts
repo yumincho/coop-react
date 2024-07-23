@@ -15,7 +15,7 @@ export const createTodoAPI = async () => {
     })
 
     return {
-      type: 'success',
+      ok: true as const,
       message: 'Todo created',
       data: {
         id: res.id,
@@ -26,7 +26,7 @@ export const createTodoAPI = async () => {
     }
   } catch {
     return {
-      type: 'error',
+      ok: false as const,
       message: 'Failed to create todo',
     }
   }
@@ -36,7 +36,7 @@ export const fetchTodoListAPI = async () => {
   try {
     const res = await pb.collection(TODOS).getFullList<Todo>()
     return {
-      type: 'success',
+      ok: true as const,
       message: 'Todos fetched',
       data: res.map((todo) => ({
         id: todo.id,
@@ -47,7 +47,7 @@ export const fetchTodoListAPI = async () => {
     }
   } catch {
     return {
-      type: 'error',
+      ok: false as const,
       message: 'Failed to get todos',
     }
   }
@@ -66,12 +66,12 @@ export const updateTodoAPI = async (id: string, todo: Todo) => {
       due: todo.due,
     })
     return {
-      type: 'success',
+      ok: true as const,
       message: 'Todo updated',
     }
   } catch {
     return {
-      type: 'error',
+      ok: false as const,
       message: 'Failed to update todo',
     }
   }
@@ -81,12 +81,12 @@ export const deleteTodoAPI = async (id: string) => {
   try {
     await pb.collection(TODOS).delete(id)
     return {
-      type: 'success',
+      ok: true as const,
       message: 'Todo deleted',
     }
   } catch {
     return {
-      type: 'error',
+      ok: false as const,
       message: 'Failed to delete todo',
     }
   }

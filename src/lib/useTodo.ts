@@ -11,14 +11,14 @@ export function useTodo() {
 
   const createTodo = async () => {
     const res = await createTodoAPI()
-    if (res.type === 'success' && res.data) {
+    if (res.ok) {
       updateTodoList([...todos, res.data])
     }
   }
 
   const fetchTodoList = async () => {
     const res = await fetchTodoListAPI()
-    if (res.type === 'success' && res.data) {
+    if (res.ok) {
       updateTodoList(res.data)
     }
   }
@@ -26,7 +26,7 @@ export function useTodo() {
   const updateTodoCompleted = async (id: string, completed: boolean) => {
     const todo = getTodo(id)
     const res = await updateTodoAPI(id, { ...todo, completed })
-    if (res.type === 'success') {
+    if (res.ok) {
       updateTodoItem(id, { ...todo, completed })
     }
   }
@@ -34,7 +34,7 @@ export function useTodo() {
   const updateTodoContent = async (id: string, content: string) => {
     const todo = getTodo(id)
     const res = await updateTodoAPI(id, { ...todo, content })
-    if (res.type === 'success') {
+    if (res.ok) {
       updateTodoItem(id, { ...todo, content })
     }
   }
@@ -42,14 +42,14 @@ export function useTodo() {
   const updateTodoDue = async (id: string, due: Date) => {
     const todo = getTodo(id)
     const res = await updateTodoAPI(id, { ...todo, due })
-    if (res.type === 'success') {
+    if (res.ok) {
       updateTodoItem(id, { ...todo, due })
     }
   }
 
   const deleteTodo = async (id: string) => {
     const res = await deleteTodoAPI(id)
-    if (res.type === 'success') {
+    if (res.ok) {
       updateTodoList(todos.filter((todo) => todo.id !== id))
     }
   }
