@@ -3,6 +3,7 @@ import { RadioButtonChecked, RadioButtonUnchecked } from '@mui/icons-material'
 import { IconButton, TextField } from '@mui/material'
 import { useState } from 'react'
 
+import { useDebounce } from '../../lib/useDebounce'
 import { useTodo } from '../../lib/useTodo'
 import { colors } from '../../styles/color'
 import DueDate from './DueDate'
@@ -19,27 +20,31 @@ const style = {
 }
 
 const TodoItem = ({ id }: { id: string }) => {
+  const debounce = useDebounce()
   const { getTodo, updateTodoContent, updateTodoCompleted, deleteTodo } =
     useTodo()
 
   const todo = getTodo(id)
+
   const [tempCompleted, setTempCompleted] = useState(todo.completed)
-  const [timerId, setTimerId] = useState<number | null>(null)
+  const [completedTmerId, setCompletedTimerId] = useState<number | null>(null)
+  const [content, setContent] = useState(todo.content)
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTodoContent(id, e.target.value)
+    setContent(e.target.value)
+    debounce(() => updateTodoContent(id, e.target.value), 250)
   }
 
   const handleDone = () => {
     const id = setTimeout(() => updateTodoCompleted(todo.id, true), 1000)
     setTempCompleted(true)
-    setTimerId(id)
+    setCompletedTimerId(id)
   }
 
   const handleRollback = () => {
     updateTodoCompleted(id, false)
     setTempCompleted(false)
-    clearTimeout(timerId!)
+    clearTimeout(completedTmerId!)
   }
 
   const handleBlur = () => {
@@ -61,7 +66,7 @@ const TodoItem = ({ id }: { id: string }) => {
         autoFocus
         disabled={tempCompleted}
         variant="standard"
-        value={todo.content}
+        value={content}
         onChange={handleTyping}
         placeholder="New Todo"
         onBlur={handleBlur}
