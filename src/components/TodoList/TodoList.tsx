@@ -21,7 +21,7 @@ const Wrapper = styled('div')(({ theme }) => ({
   padding: '1rem',
   borderRadius: '1rem',
   height: 'fit-content',
-  backgroundColor: theme.palette.grey[50],
+  backgroundColor: theme.palette.background.default,
 }))
 
 const Title = styled('div')({
