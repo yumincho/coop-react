@@ -1,0 +1,9 @@
+services:
+  db:
+    build:
+      context: .docker
+      dockerfile: pb.Dockerfile
+    ports:
+      - '8080:8080'
+    volumes:
+      - .volume/db:/pb/pb_data

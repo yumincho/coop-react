@@ -1,8 +1,10 @@
 import { css } from '@emotion/css'
 import { Add } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
+import { useEffect } from 'react'
 
-import { Todo, useTodoStore } from '../../store/todoStore'
+import { useTodo } from '../../lib/useTodo'
+import { Todo } from '../../store/todoStore'
 import { colors } from '../../styles/color'
 import TodoItem from '../Todo/TodoItem'
 
@@ -34,7 +36,15 @@ const style = {
 }
 
 const TodoList = ({ title, todos, editable = false }: TodoList) => {
-  const { addTodo } = useTodoStore()
+  const { createTodo, fetchTodoList } = useTodo()
+
+  useEffect(() => {
+    async function fetch() {
+      fetchTodoList()
+    }
+    fetch()
+  }, [])
+
   return (
     <div className={style.wrapper}>
       <div className={style.header}>
@@ -42,7 +52,7 @@ const TodoList = ({ title, todos, editable = false }: TodoList) => {
         {editable && (
           <IconButton
             style={{ color: colors.primary.main }}
-            onClick={() => addTodo()}
+            onClick={createTodo}
           >
             <Add />
           </IconButton>
