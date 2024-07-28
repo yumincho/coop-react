@@ -1,23 +1,23 @@
-import { css } from '@emotion/css'
-import { RadioButtonChecked, RadioButtonUnchecked } from '@mui/icons-material'
-import { IconButton, TextField } from '@mui/material'
+import {
+  RadioButtonChecked as RadioButtonCheckedComponent,
+  RadioButtonUnchecked,
+} from '@mui/icons-material'
+import { IconButton, TextField, styled } from '@mui/material'
 import { useState } from 'react'
 
 import { useDebounce } from '../../lib/useDebounce'
 import { useTodo } from '../../lib/useTodo'
-import { colors } from '../../styles/color'
 import DueDate from './DueDate'
 
-const style = {
-  wrapper: css({
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-  }),
-  checkedButton: css({
-    color: colors.primary.main,
-  }),
-}
+const Wrapper = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%',
+})
+
+const RadioButtonChecked = styled(RadioButtonCheckedComponent)(({ theme }) => ({
+  color: theme.palette.primary.main,
+}))
 
 const TodoItem = ({ id }: { id: string }) => {
   const debounce = useDebounce()
@@ -54,13 +54,9 @@ const TodoItem = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className={style.wrapper}>
+    <Wrapper>
       <IconButton onClick={tempCompleted ? handleRollback : handleDone}>
-        {tempCompleted ? (
-          <RadioButtonChecked className={style.checkedButton} />
-        ) : (
-          <RadioButtonUnchecked />
-        )}
+        {tempCompleted ? <RadioButtonChecked /> : <RadioButtonUnchecked />}
       </IconButton>
       <TextField
         autoFocus
@@ -73,7 +69,7 @@ const TodoItem = ({ id }: { id: string }) => {
         fullWidth
       />
       <DueDate id={id} disabled={tempCompleted} />
-    </div>
+    </Wrapper>
   )
 }
 

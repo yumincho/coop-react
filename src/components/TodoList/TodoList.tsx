@@ -1,11 +1,11 @@
-import { css } from '@emotion/css'
+// import { css } from '@emotion/css'
 import { Add } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+import { IconButton as IconButtonComponent } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { useEffect } from 'react'
 
 import { useTodo } from '../../lib/useTodo'
 import { Todo } from '../../store/todoStore'
-import { colors } from '../../styles/color'
 import TodoItem from '../Todo/TodoItem'
 
 interface TodoList {
@@ -14,26 +14,29 @@ interface TodoList {
   editable?: boolean
 }
 
-const style = {
-  wrapper: css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    padding: '1rem',
-    backgroundColor: colors.neutral.light,
-    borderRadius: '1rem',
-    height: 'fit-content',
-  }),
-  header: css({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginLeft: '0.5rem',
-    marginBottom: '0.5rem',
-    minHeight: '40px',
-  }),
-}
+const Wrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  padding: '1rem',
+  borderRadius: '1rem',
+  height: 'fit-content',
+  backgroundColor: theme.palette.grey[50],
+}))
+
+const Title = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+  marginLeft: '0.5rem',
+  marginBottom: '0.5rem',
+  minHeight: '40px',
+})
+
+const IconButton = styled(IconButtonComponent)(({ theme }) => ({
+  color: theme.palette.primary.main,
+}))
 
 const TodoList = ({ title, todos, editable = false }: TodoList) => {
   const { createTodo, fetchTodoList } = useTodo()
@@ -46,22 +49,19 @@ const TodoList = ({ title, todos, editable = false }: TodoList) => {
   }, [])
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.header}>
+    <Wrapper>
+      <Title>
         <h3>{title}</h3>
         {editable && (
-          <IconButton
-            style={{ color: colors.primary.main }}
-            onClick={createTodo}
-          >
+          <IconButton onClick={createTodo}>
             <Add />
           </IconButton>
         )}
-      </div>
+      </Title>
       {todos.map((todo) => (
         <TodoItem key={todo.id} id={todo.id} />
       ))}
-    </div>
+    </Wrapper>
   )
 }
 
