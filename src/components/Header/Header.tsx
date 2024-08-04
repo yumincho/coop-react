@@ -8,6 +8,7 @@ const header = css({
   justifyContent: 'space-between',
   alignItems: 'center',
   margin: '1rem',
+  width: '100%',
 })
 
 function Header() {
