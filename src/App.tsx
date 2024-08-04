@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import './App.css'
 import Header from './components/Header/Header'
 import TodoList from './components/TodoList/TodoList'
@@ -5,6 +7,8 @@ import { useTodoStore } from './store/todoStore'
 
 function App() {
   const { getScheduledTodos, getCompletedTodos } = useTodoStore()
+  const { t } = useTranslation()
+
   return (
     <>
       <Header />
@@ -15,8 +19,8 @@ function App() {
           gap: '1rem',
         }}
       >
-        <TodoList title="Scheduled" todos={getScheduledTodos()} editable />
-        <TodoList title="Completed" todos={getCompletedTodos()} />
+        <TodoList title={t('scheduled')} todos={getScheduledTodos()} editable />
+        <TodoList title={t('completed')} todos={getCompletedTodos()} />
       </div>
     </>
   )
